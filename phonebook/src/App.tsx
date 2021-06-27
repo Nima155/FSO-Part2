@@ -1,4 +1,3 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Form as PersonForm } from "./components/Form";
 import Persons from "./components/Persons";
@@ -11,8 +10,8 @@ const App = () => {
 	const [persons, setPersons]: any = useState([]);
 	// initial fetching from a "server" after the first render.
 	useEffect(() => {
-		axios.get("http://localhost:3001/persons").then((res) => {
-			setPersons(res.data);
+		personService.getAll().then((res) => {
+			setPersons(res);
 		});
 	}, []);
 	const [newName, setNewName] = useState("");
@@ -86,18 +85,20 @@ const App = () => {
 			});
 	};
 	const deleteUser = (id: number, name: string) => {
-		personService
-			.deleteData(id, name)
-			.then(() => {
-				messageSetter(`Deleted ${name} from the database`, "green");
-			})
-			.catch(() => {
-				messageSetter(
-					`Failed to delete ${name}, the user might already be deleted`,
-					"red"
-				);
-			});
-		setPersons(persons.filter((ele: any) => ele.id !== id));
+		if (window.confirm(`Delete ${name}?`)) {
+			personService
+				.deleteData(id, name)
+				.then(() => {
+					messageSetter(`Deleted ${name} from the database`, "green");
+				})
+				.catch(() => {
+					messageSetter(
+						`Failed to delete ${name}, the user might already be deleted`,
+						"red"
+					);
+				});
+			setPersons(persons.filter((ele: any) => ele.id !== id));
+		}
 	};
 
 	return (

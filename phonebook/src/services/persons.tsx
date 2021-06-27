@@ -4,14 +4,12 @@ const create = (newPerson: any) => {
 	// HTTP POST request to add
 	return axios.post(BASE_URL, newPerson).then((res) => res.data);
 };
-
+const getAll = () => {
+	return axios.get(BASE_URL).then((res) => res.data);
+};
 const deleteData = (id: number, name: string) => {
-	if (window.confirm(`Delete ${name}?`)) {
-		// HTTP delete request
-		return axios.delete(`${BASE_URL}/${id}`).then((res) => res.data);
-	}
-
-	return axios.delete("/nothere").then();
+	// HTTP delete request
+	return axios.delete(`${BASE_URL}/${id}`).then((res) => res.data);
 };
 
 const update = (newData: any, id: number) => {
@@ -20,5 +18,5 @@ const update = (newData: any, id: number) => {
 };
 
 // just to silence a warning
-const md = { create, deleteData, update };
+const md = { create, deleteData, update, getAll };
 export default md;
